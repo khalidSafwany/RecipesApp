@@ -13,21 +13,21 @@ class RecipesMainViewController: UIViewController {
     @IBOutlet weak var recipesSearchBar: UISearchBar!
     @IBOutlet weak var recipesTableView: UITableView!
     
+    var lastViewedRow = 0
+    var selectedRow = -1
+    
     private var recipesViewModel: RecipesViewModel?
     
-    var recipesList = [recipeObject](){
-        didSet{
-            self.recipesTableView.reloadData()
-        }
-    }
+    var recipesList = [recipeObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
         recipesTableView.delegate = self
         recipesTableView.dataSource = self
         setViewModel()
         recipesViewModel?.fetchallRecipesDataFromAPI()
+        self.title = "Recipes"
         // Do any additional setup after loading the view.
     }
     
@@ -38,18 +38,33 @@ class RecipesMainViewController: UIViewController {
         
         recipesViewModel?.bindRecipesViewModelToView = {
                     
-            self.onSuccessUpdateView()
+            self.onSuccessFetchUpdateView()
         }
         
         recipesViewModel?.bindViewModelErrorToView = {
                     
             self.onFailUpdateView()
         }
+        recipesViewModel?.bindNextPageOfRecipesFromViewModelToView = {
+            self.onSuccessBindingNewPageUpdateView()
+        }
     }
     
     
-    private func onSuccessUpdateView(){
+    // MARK: ViewModel Binders
+    
+    private func onSuccessFetchUpdateView(){
         recipesList = (recipesViewModel?.currentViewedRecipesList)!
+        self.recipesTableView.reloadData()
+        
+    }
+    
+    private func onSuccessBindingNewPageUpdateView(){
+        recipesList = (recipesViewModel?.currentViewedRecipesList)!
+        self.recipesTableView.reloadData()
+        let rowForScroll = lastViewedRow
+        let ip = NSIndexPath(row: rowForScroll, section: 0)
+        self.recipesTableView.scrollToRow(at: ip as IndexPath, at: .bottom, animated: true)
         
     }
     
@@ -66,6 +81,28 @@ class RecipesMainViewController: UIViewController {
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    //MARK: extension functions
+    
+    func fetchNextPageOfRecipes(){
+        recipesViewModel?.fetchNextPageOfRecipes()
+    }
+    
+    
+    //MARK: segue functions
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showRecipeDetails"{
+            if selectedRow != -1 {
+                let detailsVC = segue.destination as! RecipeDetailsViewController
+                detailsVC.selectedRecipe = recipesList[selectedRow].recipe!
+            }
+        }
+    }
+    
+    
+    
+    
 
 
 }

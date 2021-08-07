@@ -36,6 +36,7 @@ class RecipesViewModel {
     
     var bindRecipesViewModelToView : (()->()) = {}
     var bindViewModelErrorToView : (()->()) = {}
+    var bindNextPageOfRecipesFromViewModelToView: (()->()) = {}
     
     
     
@@ -62,6 +63,20 @@ class RecipesViewModel {
                 
             }
            
+        })
+    }
+    
+    
+    func fetchNextPageOfRecipes(){
+        recipesModel?.fetchNectPageOfRecipes(completion: { [weak self] (recipesList, error) in
+            if let error: Error = error{
+                let message = error.localizedDescription
+                self?.showError = message
+            }else{
+                self?.currentViewedRecipesList?.append(contentsOf: recipesList!)
+                self?.bindNextPageOfRecipesFromViewModelToView()
+            }
+            
         })
     }
     

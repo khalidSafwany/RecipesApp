@@ -40,4 +40,30 @@ class RecipesAPIModel {
             }
     }
     
+    
+    func fetchNectPageOfRecipes(completion: @escaping ([recipeObject]?, Error?)->()){
+        if let nextPageURLString = recipesApiResponse?._links?.next?.href{
+        AF.request(nextPageURLString).validate()
+            .responseDecodable(of: RecipesApiResponse.self){ [weak self] (response) in
+                
+                switch response.result {
+                case .success( _):
+                    
+                    guard let urlResponse = response.value else { return }
+                    self!.recipesApiResponse = urlResponse
+                    let recipesData = self!.recipesApiResponse?.hits
+                    
+                    
+                    completion(recipesData ,nil)
+                    
+                case .failure(let error):
+                    
+                    completion(nil , error)
+                    
+                    
+                }
+                
+            }
+    }
+    }
 }
