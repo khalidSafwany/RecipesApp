@@ -41,7 +41,7 @@ class RecipesAPIModel {
     }
     
     
-    func fetchNectPageOfRecipes(completion: @escaping ([recipeObject]?, Error?)->()){
+    func fetchNextPageOfRecipes(completion: @escaping ([recipeObject]?, Error?)->()){
         if let nextPageURLString = recipesApiResponse?._links?.next?.href{
         AF.request(nextPageURLString).validate()
             .responseDecodable(of: RecipesApiResponse.self){ [weak self] (response) in
@@ -65,5 +65,34 @@ class RecipesAPIModel {
                 
             }
     }
+    }
+    
+    
+    
+    func fetchRecipesForFilter(_ filterString: String, completion: @escaping ([recipeObject]?, Error?)->()){
+        let filterURL = URLs.getFilterURL(for: filterString)
+        
+        AF.request(filterURL).validate()
+            .responseDecodable(of: RecipesApiResponse.self){ [weak self] (response) in
+                
+                switch response.result {
+                case .success( _):
+                    
+                    guard let urlResponse = response.value else { return }
+                    self!.recipesApiResponse = urlResponse
+                    let filterRecipesData = self!.recipesApiResponse?.hits
+                    
+                    
+                    completion(filterRecipesData ,nil)
+                    
+                case .failure(let error):
+                    
+                    completion(nil , error)
+                    
+                    
+                }
+                
+            }
+        
     }
 }

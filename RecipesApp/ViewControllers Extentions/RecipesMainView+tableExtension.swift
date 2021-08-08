@@ -29,11 +29,12 @@ extension RecipesMainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
         if indexPath.row == recipesList.count - 2{
             fetchNextPageOfRecipes()
         }
         lastViewedRow = indexPath.row
-        
+       
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

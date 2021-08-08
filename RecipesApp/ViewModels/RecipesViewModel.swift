@@ -68,13 +68,27 @@ class RecipesViewModel {
     
     
     func fetchNextPageOfRecipes(){
-        recipesModel?.fetchNectPageOfRecipes(completion: { [weak self] (recipesList, error) in
+        recipesModel?.fetchNextPageOfRecipes(completion: { [weak self] (recipesList, error) in
             if let error: Error = error{
                 let message = error.localizedDescription
                 self?.showError = message
             }else{
                 self?.currentViewedRecipesList?.append(contentsOf: recipesList!)
                 self?.bindNextPageOfRecipesFromViewModelToView()
+            }
+            
+        })
+    }
+    
+    func fetchFilterRecipesFromAPI(filterIndex: Int){
+        let (_, filterWord) = ConstantData.filterOptions[filterIndex]
+        recipesModel?.fetchRecipesForFilter(filterWord, completion:{ [weak self] (filterRecipesList, error) in
+            if let error: Error = error{
+                let message = error.localizedDescription
+                self?.showError = message
+            }else{
+                self?.currentViewedRecipesList = filterRecipesList
+                
             }
             
         })

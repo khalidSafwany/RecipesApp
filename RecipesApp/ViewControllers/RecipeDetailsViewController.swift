@@ -14,6 +14,8 @@ class RecipeDetailsViewController: UIViewController {
     @IBOutlet weak var ingrediantsTableView: UITableView!
     @IBOutlet weak var recipeImageView: UIImageView!
     
+    @IBOutlet weak var viewWebsiteButton: UIButton!
+    
     var selectedRecipe = Recipe()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,7 @@ class RecipeDetailsViewController: UIViewController {
     }
     
     private func setViewByRecipeDetails(){
+        viewWebsiteButton.setRoundedCorner()
         self.title = selectedRecipe.label
         if let recipeimageURL = selectedRecipe.image{
         recipeImageView.sd_setImage(with: URL(string: recipeimageURL), completed: nil)
@@ -41,9 +44,7 @@ class RecipeDetailsViewController: UIViewController {
         let activityViewController = UIActivityViewController(activityItems : sharedObjects, applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = self.view
 
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail]
-
-            self.present(activityViewController, animated: true, completion: nil)
+        self.present(activityViewController, animated: true, completion: nil)
         }
     }
     

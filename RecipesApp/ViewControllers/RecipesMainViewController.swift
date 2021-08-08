@@ -16,7 +16,8 @@ class RecipesMainViewController: UIViewController {
     var lastViewedRow = 0
     var selectedRow = -1
     
-    private var recipesViewModel: RecipesViewModel?
+    private (set) var recipesViewModel: RecipesViewModel?
+    var isFilterSelected = false
     
     var recipesList = [recipeObject]()
     
@@ -25,9 +26,13 @@ class RecipesMainViewController: UIViewController {
        
         recipesTableView.delegate = self
         recipesTableView.dataSource = self
+        filterCollectionView.dataSource = self
+        filterCollectionView.delegate = self
+        recipesSearchBar.delegate = self
         setViewModel()
         recipesViewModel?.fetchallRecipesDataFromAPI()
         self.title = "Recipes"
+        self.showSpinner()
         // Do any additional setup after loading the view.
     }
     
@@ -56,6 +61,10 @@ class RecipesMainViewController: UIViewController {
     private func onSuccessFetchUpdateView(){
         recipesList = (recipesViewModel?.currentViewedRecipesList)!
         self.recipesTableView.reloadData()
+        let ip = NSIndexPath(row: 0, section: 0)
+        self.recipesTableView.scrollToRow(at: ip as IndexPath, at: .bottom, animated: true)
+        self.stopSpinner()
+
         
     }
     
@@ -65,6 +74,7 @@ class RecipesMainViewController: UIViewController {
         let rowForScroll = lastViewedRow
         let ip = NSIndexPath(row: rowForScroll, section: 0)
         self.recipesTableView.scrollToRow(at: ip as IndexPath, at: .bottom, animated: true)
+        
         
     }
     
