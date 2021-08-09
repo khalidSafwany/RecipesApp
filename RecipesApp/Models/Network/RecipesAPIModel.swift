@@ -13,7 +13,13 @@ import Alamofire
 class RecipesAPIModel {
     
     private (set) var recipesApiResponse: RecipesApiResponse?
-    private (set) var savedSearchWord: String?
+    private (set) static var savedSearchWord: String?
+    
+    
+    
+    static func getLastSavedWord() -> String{
+        return savedSearchWord!
+    }
     
     
     func fetchAllRecipes(of searchWord:String, completion : @escaping ([recipeObject]?, Error?)->()){
@@ -32,7 +38,7 @@ class RecipesAPIModel {
                         completion([recipeObject](), nil)
                         return
                     }
-                    self!.savedSearchWord = searchWord
+                    RecipesAPIModel.savedSearchWord = searchWord
                     self!.recipesApiResponse = urlResponse
                     completion(recipesData ,nil)
                     
@@ -78,7 +84,7 @@ class RecipesAPIModel {
     
     
     func fetchRecipesForFilter(_ filterString: String, completion: @escaping ([recipeObject]?, Error?)->()){
-        let filterURL = URLs.getFilterURL(for: self.savedSearchWord!, with: filterString)
+        let filterURL = URLs.getFilterURL(for: RecipesAPIModel.savedSearchWord!, with: filterString)
         
         AF.request(filterURL).validate()
             .responseDecodable(of: RecipesApiResponse.self){ [weak self] (response) in

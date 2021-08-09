@@ -23,6 +23,7 @@ extension RecipesMainViewController: UISearchBarDelegate{
         if let searchText = searchBar.text{
             self.showSpinner()
         recipesViewModel?.fetchallRecipesDataFromAPI(of: searchText)
+            searchBar.resignFirstResponder()
         }
     }
     

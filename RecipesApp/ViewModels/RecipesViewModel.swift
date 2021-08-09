@@ -117,7 +117,7 @@ class RecipesViewModel {
         return returnText
     }
     
-    func getLastSavedWord()->String{
-        return (recipesModel?.savedSearchWord)!
+    static func getLastSavedWord()->String{
+        return (RecipesAPIModel.savedSearchWord)!
     }
 }

@@ -120,17 +120,6 @@ class RecipesMainViewController: UIViewController {
         return userDefaults.string(forKey: ConstantData.savedLastSearchWord) ?? ConstantData.defaultSearchText
     }
     
-    private func setLastSavedSearch(word lastSearchword:String){
-        let userDefaults = UserDefaults.standard
-
-        
-        userDefaults.set(lastSearchword, forKey: ConstantData.savedLastSearchWord)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        setLastSavedSearch(word: (recipesViewModel?.getLastSavedWord())!)
-    }
-    
     private func retrieveSession(){
         let lastSearchWord = getlastSavedSearchString()
         self.recipesSearchBar.placeholder = lastSearchWord
