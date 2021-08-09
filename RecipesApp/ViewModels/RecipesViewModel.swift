@@ -41,6 +41,7 @@ class RecipesViewModel {
     
     
     
+    
     init() {
         
         self.recipesModel = RecipesAPIModel()
@@ -48,9 +49,11 @@ class RecipesViewModel {
     }
     
     
-    func fetchallRecipesDataFromAPI (){
+    func fetchallRecipesDataFromAPI (of searchWord: String){
         
-        recipesModel?.fetchAllRecipes(completion: { (recipesList, error) in
+        let searchWordAfterTrimming = setSearchWordToAPIPattern(text: searchWord)
+        
+        recipesModel?.fetchAllRecipes(of: searchWordAfterTrimming,completion: { (recipesList, error) in
             
             if let error : Error = error{
                 
@@ -58,8 +61,15 @@ class RecipesViewModel {
                 self.showError = message
                 
             }else{
-                
-                self.allRecipesFromAPI = recipesList
+                if recipesList?.count == 0 {
+                    
+                    let message = ConstantData.noSearchResultsFoundErrorString
+                    self.showError = message
+                    
+                }else{
+                    self.allRecipesFromAPI = recipesList
+                }
+               
                 
             }
            
@@ -96,5 +106,18 @@ class RecipesViewModel {
     
     func setViewedRecipesToAllRecipes(){
         currentViewedRecipesList = allRecipesFromAPI
+    }
+    
+    
+    
+    private func setSearchWordToAPIPattern(text: String)-> String{
+        var returnText = text.replacingOccurrences(of: ".", with: "")
+        returnText = returnText.trimmingCharacters(in: .whitespaces)
+        returnText = returnText.replacingOccurrences(of: " ", with: "-")
+        return returnText
+    }
+    
+    func getLastSavedWord()->String{
+        return (recipesModel?.savedSearchWord)!
     }
 }

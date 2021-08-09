@@ -30,7 +30,9 @@ class RecipesMainViewController: UIViewController {
         filterCollectionView.delegate = self
         recipesSearchBar.delegate = self
         setViewModel()
-        recipesViewModel?.fetchallRecipesDataFromAPI()
+        
+        retrieveSession()
+        
         self.title = "Recipes"
         self.showSpinner()
         // Do any additional setup after loading the view.
@@ -80,7 +82,7 @@ class RecipesMainViewController: UIViewController {
     
     
     private func onFailUpdateView(){
-        let alert = UIAlertController(title: "Error", message: recipesViewModel!.showError, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Sorry", message: recipesViewModel!.showError, preferredStyle: .alert)
         
         let okAction  = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
             
@@ -111,7 +113,30 @@ class RecipesMainViewController: UIViewController {
     }
     
     
+    private func getlastSavedSearchString()-> String{
+        let userDefaults = UserDefaults.standard
+
+        
+        return userDefaults.string(forKey: ConstantData.savedLastSearchWord) ?? ConstantData.defaultSearchText
+    }
     
+    private func setLastSavedSearch(word lastSearchword:String){
+        let userDefaults = UserDefaults.standard
+
+        
+        userDefaults.set(lastSearchword, forKey: ConstantData.savedLastSearchWord)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        setLastSavedSearch(word: (recipesViewModel?.getLastSavedWord())!)
+    }
+    
+    private func retrieveSession(){
+        let lastSearchWord = getlastSavedSearchString()
+        self.recipesSearchBar.placeholder = lastSearchWord
+        recipesViewModel?.fetchallRecipesDataFromAPI(of: lastSearchWord)
+        
+    }
     
 
 

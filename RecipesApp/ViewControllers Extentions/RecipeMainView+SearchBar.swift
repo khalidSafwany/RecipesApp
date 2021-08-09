@@ -15,6 +15,30 @@ extension RecipesMainViewController: UISearchBarDelegate{
         if   range.location == 0, text.first == " "{
             return false
         }
+        if text == "\n"{return true}
         return text.rangeOfCharacter(from: CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ")) != nil
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text{
+            self.showSpinner()
+        recipesViewModel?.fetchallRecipesDataFromAPI(of: searchText)
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
+        searchBar.setShowsCancelButton(true, animated: true)
+        searchBar.showsCancelButton = true
+       
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.showsCancelButton = false
     }
 }
