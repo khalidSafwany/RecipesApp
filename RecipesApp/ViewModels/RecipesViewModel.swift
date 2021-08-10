@@ -52,6 +52,7 @@ class RecipesViewModel {
     func fetchallRecipesDataFromAPI (of searchWord: String)-> String{
         
         let searchWordAfterTrimming = setSearchWordToAPIPattern(text: searchWord)
+        if Connectivity.isConnectedToInternet{
         
         recipesModel?.fetchAllRecipes(of: searchWordAfterTrimming,completion: { (recipesList, error) in
             
@@ -74,11 +75,16 @@ class RecipesViewModel {
             }
            
         })
+        }else{
+            let message = ConstantData.noConnectionMessage
+            self.showError = message
+        }
         return searchWordAfterTrimming
     }
     
     
     func fetchNextPageOfRecipes(){
+        if Connectivity.isConnectedToInternet{
         recipesModel?.fetchNextPageOfRecipes(completion: { [weak self] (recipesList, error) in
             if let error: Error = error{
                 let message = error.localizedDescription
@@ -89,10 +95,15 @@ class RecipesViewModel {
             }
             
         })
+        }else{
+            let message = ConstantData.noConnectionMessage
+            self.showError = message
+        }
     }
     
     func fetchFilterRecipesFromAPI(filterIndex: Int){
         let (_, filterWord) = ConstantData.filterOptions[filterIndex]
+        if Connectivity.isConnectedToInternet{
         recipesModel?.fetchRecipesForFilter(filterWord, completion:{ [weak self] (filterRecipesList, error) in
             if let error: Error = error{
                 let message = error.localizedDescription
@@ -103,6 +114,10 @@ class RecipesViewModel {
             }
             
         })
+        }else{
+            let message = ConstantData.noConnectionMessage
+            self.showError = message
+        }
     }
     
     func setViewedRecipesToAllRecipes(){

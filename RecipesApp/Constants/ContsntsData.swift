@@ -15,4 +15,6 @@ struct ConstantData{
     static let defaultSearchText = "Meat"
     
     static let noSearchResultsFoundErrorString = "No results were found for your search words try different recipe or ingrediants"
+    
+    static let noConnectionMessage = "Check your connection and try again"
 }

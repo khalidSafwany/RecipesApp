@@ -16,6 +16,7 @@
 		FE6CF76326C2CE9D00E28D45 /* RecommendationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6CF76226C2CE9D00E28D45 /* RecommendationStack.swift */; };
 		FE6CF76926C2D18600E28D45 /* SearchRecommendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6CF76826C2D18600E28D45 /* SearchRecommendationModel.swift */; };
 		FE6CF77426C2D57C00E28D45 /* SearchRecommendationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6CF77326C2D57C00E28D45 /* SearchRecommendationsViewModel.swift */; };
+		FE6CF77A26C3086F00E28D45 /* Connectivety.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6CF77926C3086F00E28D45 /* Connectivety.swift */; };
 		FE7AD16426C031C10024F673 /* RoundedCornerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7AD16326C031C10024F673 /* RoundedCornerButton.swift */; };
 		FE7AD16C26C033DB0024F673 /* RecipesMainView+FilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7AD16B26C033DB0024F673 /* RecipesMainView+FilterCollectionView.swift */; };
 		FE7AD17A26C035100024F673 /* FilterCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7AD17926C035100024F673 /* FilterCellCollectionViewCell.swift */; };
@@ -70,6 +71,7 @@
 		FE6CF76226C2CE9D00E28D45 /* RecommendationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationStack.swift; sourceTree = "<group>"; };
 		FE6CF76826C2D18600E28D45 /* SearchRecommendationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecommendationModel.swift; sourceTree = "<group>"; };
 		FE6CF77326C2D57C00E28D45 /* SearchRecommendationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecommendationsViewModel.swift; sourceTree = "<group>"; };
+		FE6CF77926C3086F00E28D45 /* Connectivety.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connectivety.swift; sourceTree = "<group>"; };
 		FE7AD16326C031C10024F673 /* RoundedCornerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerButton.swift; sourceTree = "<group>"; };
 		FE7AD16B26C033DB0024F673 /* RecipesMainView+FilterCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipesMainView+FilterCollectionView.swift"; sourceTree = "<group>"; };
 		FE7AD17926C035100024F673 /* FilterCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCellCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -158,6 +160,14 @@
 			path = LocalStorage;
 			sourceTree = "<group>";
 		};
+		FE6CF77826C3085F00E28D45 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				FE6CF77926C3086F00E28D45 /* Connectivety.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		FE7AD16226C031A70024F673 /* UI Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +210,7 @@
 		FE9480E326BC35E800E41CDC /* RecipesApp */ = {
 			isa = PBXGroup;
 			children = (
+				FE6CF77826C3085F00E28D45 /* Networking */,
 				FE7AD17026C034B80024F673 /* Cells */,
 				FE7AD16226C031A70024F673 /* UI Extensions */,
 				FE94817026BC61C700E41CDC /* ViewModels */,
@@ -576,6 +587,7 @@
 				FE94813926BC490D00E41CDC /* RecipeTableCell.swift in Sources */,
 				FE94815A26BC5E4C00E41CDC /* RecipesAPIModel.swift in Sources */,
 				FE7AD16C26C033DB0024F673 /* RecipesMainView+FilterCollectionView.swift in Sources */,
+				FE6CF77A26C3086F00E28D45 /* Connectivety.swift in Sources */,
 				FE94813426BC433B00E41CDC /* RecipesAPIResponse.swift in Sources */,
 				FE6CF76326C2CE9D00E28D45 /* RecommendationStack.swift in Sources */,
 				FE7AD18226C051950024F673 /* ViewController+Spinner.swift in Sources */,

@@ -176,15 +176,17 @@ class RecipesMainViewController: UIViewController {
             if suggestionsTableView == nil {
                 //I get keyboardhight dynamically and 60 is my navigationBar height.
                 
-                let availHeight = (RecommendationStack.recomendations.count + 2) * 30
+                let availHeight = (RecommendationStack.recomendations.count + 1) * 30
                 suggestionsTableView = UITableView(frame: CGRect(x: 0, y: 82, width: Int(UIScreen.main.bounds.size.width), height: availHeight), style: .grouped)
                 suggestionsTableView.tag = 2
                 self.suggestionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "suggesionCell")
                 suggestionsTableView?.delegate = self
                 suggestionsTableView?.dataSource = self
                 suggestionsTableView.layer.zPosition = .greatestFiniteMagnitude
+                
                 self.view.insertSubview(suggestionsTableView, belowSubview: recipesSearchBar)
-            suggestionsTableView?.isHidden = false
+          
+                suggestionsTableView?.isHidden = false
         }
     }
     
