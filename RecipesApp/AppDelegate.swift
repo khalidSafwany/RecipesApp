@@ -21,7 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillResignActive(_ application: UIApplication) {
         UserDefaults.standard.set(RecipesAPIModel.getLastSavedWord(), forKey: ConstantData.savedLastSearchWord)
+        SearchRecommendationModel.saveRecommendationsToCoreData()
     }
+    
+    
 
    
 

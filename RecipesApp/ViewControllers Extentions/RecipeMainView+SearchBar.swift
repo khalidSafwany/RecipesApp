@@ -20,11 +20,7 @@ extension RecipesMainViewController: UISearchBarDelegate{
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let searchText = searchBar.text{
-            self.showSpinner()
-        recipesViewModel?.fetchallRecipesDataFromAPI(of: searchText)
-            searchBar.resignFirstResponder()
-        }
+        startSearch(searchBar: searchBar)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -35,11 +31,27 @@ extension RecipesMainViewController: UISearchBarDelegate{
         
         searchBar.setShowsCancelButton(true, animated: true)
         searchBar.showsCancelButton = true
+//        showSuggestionsTableView()
        
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)
         searchBar.showsCancelButton = false
+    }
+    
+    func startSearch(searchBar: UISearchBar){
+        if let searchText = searchBar.text{
+            self.showSpinner()
+        let lastSearchWord = recipesViewModel?.fetchallRecipesDataFromAPI(of: searchText)
+            searchRecommendationObject.push(lastSearchWord ?? "")
+            removeSuggestionsTableView()
+            searchBar.resignFirstResponder()
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        removeSuggestionsTableView()
     }
 }

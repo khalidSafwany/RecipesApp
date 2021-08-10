@@ -13,10 +13,16 @@ class RecipesMainViewController: UIViewController {
     @IBOutlet weak var recipesSearchBar: UISearchBar!
     @IBOutlet weak var recipesTableView: UITableView!
     
+    var suggestionsTableView: UITableView!
+    
+    var keyboardHeight: CGFloat!
+    
     var lastViewedRow = 0
     var selectedRow = -1
     
     private (set) var recipesViewModel: RecipesViewModel?
+    var searchRecommendationObject = RecommendationStack()
+    var searchRecommendationsViewModel: SearchRecommendationsViewModel?
     var isFilterSelected = false
     
     var recipesList = [recipeObject]()
@@ -29,18 +35,49 @@ class RecipesMainViewController: UIViewController {
         filterCollectionView.dataSource = self
         filterCollectionView.delegate = self
         recipesSearchBar.delegate = self
-        setViewModel()
+        setRecipesViewModel()
+        setRecommendationViewModel()
         
         retrieveSession()
         
         self.title = "Recipes"
         self.showSpinner()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handle(keyboardShowNotification:)),
+                                               name: UIResponder.keyboardDidShowNotification,
+                                               object: nil)
         // Do any additional setup after loading the view.
     }
     
     
+    @objc
+    private func handle(keyboardShowNotification notification: Notification) {
+        // 1
+        print("Keyboard show notification")
+        
+        // 2
+        if let userInfo = notification.userInfo,
+            // 3
+            let keyboardRectangle = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            print(keyboardRectangle.height)
+            keyboardHeight = keyboardRectangle.height
+            showSuggestionsTableView()
+        }
+    }
     
-    private func setViewModel(){
+    
+    private func setRecommendationViewModel(){
+        searchRecommendationsViewModel = SearchRecommendationsViewModel()
+        searchRecommendationsViewModel?.bindRecomendationsToMainView = {
+            self.onSuccessRecommendationsFetchUpdateView()
+        }
+        searchRecommendationsViewModel?.bindViewModelErrorToView = {
+                    
+            self.onFailUpdateView()
+        }
+        
+    }
+    private func setRecipesViewModel(){
         recipesViewModel = RecipesViewModel()
         
         recipesViewModel?.bindRecipesViewModelToView = {
@@ -80,6 +117,11 @@ class RecipesMainViewController: UIViewController {
         
     }
     
+    
+    private func onSuccessRecommendationsFetchUpdateView(){
+        self.searchRecommendationObject = (searchRecommendationsViewModel?.searchRecommendationsObject)!
+        print(searchRecommendationObject.getRecommendations())
+    }
     
     private func onFailUpdateView(){
         let alert = UIAlertController(title: "Sorry", message: recipesViewModel!.showError, preferredStyle: .alert)
@@ -123,10 +165,36 @@ class RecipesMainViewController: UIViewController {
     private func retrieveSession(){
         let lastSearchWord = getlastSavedSearchString()
         self.recipesSearchBar.placeholder = lastSearchWord
-        recipesViewModel?.fetchallRecipesDataFromAPI(of: lastSearchWord)
+        let _ = recipesViewModel?.fetchallRecipesDataFromAPI(of: lastSearchWord)
+        searchRecommendationsViewModel?.fetchSearchRecommendations()
+        
+        
         
     }
     
+    func showSuggestionsTableView() {
+            if suggestionsTableView == nil {
+                //I get keyboardhight dynamically and 60 is my navigationBar height.
+                
+                let availHeight = (RecommendationStack.recomendations.count + 2) * 30
+                suggestionsTableView = UITableView(frame: CGRect(x: 0, y: 82, width: Int(UIScreen.main.bounds.size.width), height: availHeight), style: .grouped)
+                suggestionsTableView.tag = 2
+                self.suggestionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "suggesionCell")
+                suggestionsTableView?.delegate = self
+                suggestionsTableView?.dataSource = self
+                suggestionsTableView.layer.zPosition = .greatestFiniteMagnitude
+                self.view.insertSubview(suggestionsTableView, belowSubview: recipesSearchBar)
+            suggestionsTableView?.isHidden = false
+        }
+    }
+    
+    
+    func removeSuggestionsTableView() {
+        if suggestionsTableView != nil{
+            suggestionsTableView?.removeFromSuperview()
+            suggestionsTableView = nil
+        }
+        }
 
 
 }

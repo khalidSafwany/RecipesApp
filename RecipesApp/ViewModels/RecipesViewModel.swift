@@ -49,7 +49,7 @@ class RecipesViewModel {
     }
     
     
-    func fetchallRecipesDataFromAPI (of searchWord: String){
+    func fetchallRecipesDataFromAPI (of searchWord: String)-> String{
         
         let searchWordAfterTrimming = setSearchWordToAPIPattern(text: searchWord)
         
@@ -74,6 +74,7 @@ class RecipesViewModel {
             }
            
         })
+        return searchWordAfterTrimming
     }
     
     
